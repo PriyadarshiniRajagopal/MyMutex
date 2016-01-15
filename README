@@ -1,0 +1,38 @@
+ Group info:
+ dvvira Denil Vijay Vira 
+ prajago4 Priyadarshini Rajagopal
+ wli29 Wanqui Li
+
+To run the program, untar p5.tgz and then do - 
+
+make clean; make
+./a4
+
+Output of Successful execution : 
+main xxxx
+PASS
+
+Output of unsuccessful execution : 
+main xxxx
+FAIL
+
+New files included : 
+mytest.c
+mymutex.h/.c
+mycond.h/.c
+mybarrier.h/.c
+Makefile
+README
+
+1. mytest.c
+Tests various functions defined in mymutex, mybarrier and mycond files. Prints PASS on successful execution and FAIL in case of any errors.
+
+2. mymutex.h/.c
+In mythread_mutex_init, set mutex’s value to 0 and queue to NULL, meaning lock available and no threads in the queue. mythread_mutex_lock will try to busy waiting 50 times until block itself or use Compare_and_Swap to try to grab the lock. mythread_mutex_unlock will wake up one thread in the blocking queue by calling mythread_unblock.
+
+3. mycond.h/.c
+mythread_cond_init will set its blocking queue empty and make itself valid. mythread_cond_wait will enter the block phase 1 first to prepare for lock and release the lock the thread is holding. During this time, if it is not signaled, it will be blocked. Otherwise, it won’t be blocked but simply regain the lock again before return. mythread_cond_signal will wake up one thread in the queue while mythread_cond_broadcast will wake up all the threads in the queue. mythread_cond_destroy will set the condition variable to invalid.
+
+4. mybarrier.h/.c
+mythread_barrier_init will set count, init_count to the number of threads required in the barrier and queue to NULL. mythread_barrier_wait will first count—- if count>0. If count==0, which means itself is the last thread required, it unblocks all the threads in the queue, set count back to init_count and return MYTHREAD_BARRIER_SERIAL_THREAD. Otherwise, it will block itself.
+
